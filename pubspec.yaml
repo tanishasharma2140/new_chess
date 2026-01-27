@@ -1,0 +1,65 @@
+name: new_chess
+description: "A new Flutter project."
+
+publish_to: 'none'
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.0
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  cupertino_icons: ^1.0.8
+  firebase_core: ^3.9.0
+  cloud_firestore: ^5.6.0
+  firebase_auth: ^5.3.4
+  shared_preferences: ^2.3.5
+  image_picker: ^1.1.2
+  firebase_storage: ^12.3.7
+  provider: ^6.1.2
+  flutter_tts: ^4.2.1
+  share_plus: ^10.1.4
+  url_launcher: ^6.3.1
+  just_audio: ^0.10.4
+  pinput:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^6.0.0
+
+
+flutter:
+
+
+  uses-material-design: true
+
+  assets:
+    - Assets/
+    - Assets/sounds/
+    - Assets/board/
+    - Assets/icons/
+
+  fonts:
+    - family: roboto_reg
+      fonts:
+        - asset: fonts/roboto_reg.ttf
+    - family: roboto_black
+      fonts:
+        - asset: fonts/roboto_black.ttf
+    - family: poppins_regular
+      fonts:
+       - asset: fonts/poppins_regular.ttf
+    - family: kanit_regular
+      fonts:
+        - asset: fonts/kanit_regular.ttf
+
+
