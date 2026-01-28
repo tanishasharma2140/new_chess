@@ -51,31 +51,39 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
       body: Container(
         width: Sizes.screenWidth,
         decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage( Assets.assetsDashboardBackground,),fit: BoxFit.cover)
+          image: DecorationImage(image: AssetImage( Assets.boardBackground,),fit: BoxFit.cover)
         ),
         child: Column(
           children: [
             SizedBox(height: Sizes.screenHeight*0.02,),
             Image.asset(
-              Assets.assetsChessLogo,
+              Assets.boardChess,
               width: 150,
               height: 150,
               fit: BoxFit.contain,
             ),
             SizedBox(height: Sizes.screenHeight*0.07,),
-            const Image(image: AssetImage(Assets.assetsIconPerson)),
-           const  TextConst(
+            CircleAvatar(
+              radius: 28,
+              backgroundColor: ChessColor.white,
+              backgroundImage: const AssetImage(Assets.iconsProfile),
+            ),
+            const  TextConst(
               title: "First Player Found...!!",
               color: ChessColor.white,fontWeight: FontWeight.bold,
             ),
             const SizedBox(height: 40),
           const  PlayerSearchingAnimation(),
             const SizedBox(height: 30),
-            const Image(image: AssetImage(Assets.assetsIconPerson)),
+            CircleAvatar(
+              radius: 28,
+              backgroundColor: ChessColor.white,
+              backgroundImage: const AssetImage(Assets.iconsProfile),
+            ),
             const Text(
               'Waiting for Player 2...',
               style: TextStyle(
-                color: Colors.green,
+                color: ChessColor.white,
                 fontSize: 15,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,

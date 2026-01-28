@@ -76,14 +76,17 @@ class GameController extends ChangeNotifier {
   Future<void>
   initGame(int gameType, BuildContext context) async {
     selectedGameType = gameType;
+    print(selectedGameType);
+    print("😂");
     switch (gameType) {
       case 1:
         findOrCreateGameRoom(context);
         break;
       case 2:
+        findOrCreateGameRoom(context);
         break;
       case 3:
-        // Navigator.pushNamed(context, RoutesName.playWFrdLoad);
+        Navigator.pushNamed(context, RoutesName.playWFrdLoad);
         break;
       case 4:
         Navigator.pushNamed(context, RoutesName.levelSelection);
@@ -840,7 +843,7 @@ class GameController extends ChangeNotifier {
       }
     }
 
-// move the piece and clear the old spot
+   // move the piece and clear the old spot
     board[newRow][newCol] = selectedPiece;
     board[selectedRow][selectedCol] = null;
 

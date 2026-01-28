@@ -47,7 +47,7 @@ class _MainRootState extends State<MainRoot> {
   }
 }
 
-class GameBottomNav extends StatelessWidget {
+ class GameBottomNav extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onTabChange;
 

@@ -26,6 +26,7 @@ class Assets {
   static const String assetsGoogleLogo = 'Assets/google_logo.png';
   static const String assetsIconPerson = 'Assets/icon_person.png';
   static const String assetsIndFlag = 'Assets/ind_flag.png';
+  static const String iconsJoinBtn = 'Assets/icons/join_btn.png';
   static const String assetsKing = 'Assets/king.png';
   static const String assetsKnight = 'Assets/knight.png';
   static const String assetsKnightL = 'Assets/knight_l.png';
@@ -116,6 +117,7 @@ class Assets {
   static const String iconsMessage = 'Assets/icons/message.png';
   static const String iconsMic = 'Assets/icons/mic.png';
   static const String iconsMicOff = 'Assets/icons/mic_off.png';
+  static const String iconsNextBtn = 'Assets/icons/next_btn.png';
   static const String iconsPlaySd = 'Assets/icons/play-sd.png';
   static const String iconsPlusUpper = 'Assets/icons/plus-upper.png';
   static const String iconsProfile = 'Assets/icons/profile.png';
@@ -132,6 +134,7 @@ class Assets {
   static const String iconsTriangle = 'Assets/icons/triangle.png';
   static const String iconsWheel = 'Assets/icons/wheel.png';
   static const String iconsWhiteFlag = 'Assets/icons/white_flag.png';
+  static const String iconsWhitetheeDButton = 'Assets/icons/whitetheeD_button.png';
   static const String iconsWinn = 'Assets/icons/winn.png';
   static const String soundsCapture = 'Assets/sounds/capture.mp3';
   static const String soundsCheck = 'Assets/sounds/Check.mp3';

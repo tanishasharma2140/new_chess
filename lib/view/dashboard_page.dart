@@ -46,29 +46,30 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 6),
     )..repeat(reverse: true);
 
-    _scaleAnimation = Tween<double>(begin: 0.9, end: 1.1).animate(
+    _scaleAnimation = Tween<double>(begin: 0.94, end: 1.06).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Curves.easeInOut,
+        curve: Curves.easeInOutCubic,
       ),
     );
 
-    _slideAnimation = Tween<double>(begin: -20, end: 20).animate(
+    _slideAnimation = Tween<double>(begin: -12, end: 12).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Curves.easeInOut,
+        curve: Curves.easeInOutCubic,
       ),
     );
 
-    _opacityAnimation = Tween<double>(begin: 0.7, end: 1.0).animate(
+    _opacityAnimation = Tween<double>(begin: 0.78, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Curves.easeInOut,
+        curve: Curves.easeInOutCubic,
       ),
     );
+
   }
 
   @override
@@ -163,7 +164,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
     ChessBoardModel(
       // title: 'Play with Friends',
       // subtitle: 'Local multiplayer mode',
-      gameType: 2,
+      gameType: 1,
       image: Assets.assetsOnline,
     ),
     ChessBoardModel(
@@ -207,7 +208,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                     child: Opacity(
                       opacity: _opacityAnimation.value,
                       child: Container(
-                        height: 200,
+                        height: 220,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           image: DecorationImage(

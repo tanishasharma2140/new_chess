@@ -1,8 +1,11 @@
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:new_chess/generated/assets.dart';
 import 'package:new_chess/res/sizing_const.dart';
 import 'package:new_chess/res/text_const.dart';
+import 'package:new_chess/view/game_history.dart';
+import 'package:new_chess/view/terms_of_services.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -90,6 +93,11 @@ class _SettingState extends State<Setting> {
                 _optionTile("Edit Profile"),
                 _optionTile("Change Password"),
                 _optionTile("Privacy & Security"),
+                GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, CupertinoPageRoute(builder: (context)=> GameHistory()));
+                    },
+                    child: _optionTile("Game History")),
 
                 const SizedBox(height: 32),
 
@@ -97,7 +105,11 @@ class _SettingState extends State<Setting> {
                 _sectionTitle("Support"),
                 const SizedBox(height: 12),
                 _optionTile("Help & FAQ"),
-                _optionTile("Terms of Service"),
+                GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, CupertinoPageRoute(builder: (context)=> TermsOfServices()));
+                    },
+                    child: _optionTile("Terms of Service")),
                 _optionTile("Contact Support"),
 
                 const SizedBox(height: 40),
