@@ -9,12 +9,14 @@ class Assets {
   static const String assetsBishop = 'Assets/bishop.png';
   static const String assetsBoard = 'Assets/board.png';
   static const String assetsButton = 'Assets/button.png';
+  static const String assetsBackground = 'Assets/background.png';
   static const String assetsCheckmate = 'Assets/checkmate.png';
   static const String assetsChessBackground = 'Assets/chess_background.png';
   static const String assetsChessBoard = 'Assets/chess_board.png';
   static const String assetsChessLogo = 'Assets/chess_logo.png';
   static const String assetsCoin = 'Assets/coin.png';
   static const String assetsConstButton = 'Assets/const_button.png';
+  static const String assetsChessClashLogo = 'Assets/chess_clash_logo.png';
   static const String assetsDashBack = 'Assets/dash_back.jpg';
   static const String assetsDashboardBackground = 'Assets/dashboard_background.png';
   static const String assetsDashboardImg = 'Assets/dashboard_img.jpg';

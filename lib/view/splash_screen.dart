@@ -44,6 +44,7 @@
 //     );
 //   }
 // }
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:new_chess/generated/assets.dart';
 import 'package:new_chess/view/auth/login_page.dart';
@@ -55,40 +56,38 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> {
   double progress = 0;
   bool fadeOut = false;
 
   @override
   void initState() {
     super.initState();
+    startLoading();
+  }
 
-    // Fake loading simulation (game style)
-    Future.doWhile(() async {
-      await Future.delayed(const Duration(milliseconds: 50));
+  void startLoading() async {
+    Timer.periodic(const Duration(milliseconds: 40), (timer) {
       if (progress < 1) {
-        setState(() => progress += 0.015);
-        return true;
+        setState(() {
+          progress += 0.02;
+        });
       } else {
-        // Fade out + Navigate
+        timer.cancel();
         setState(() => fadeOut = true);
 
-        Future.delayed(const Duration(milliseconds: 300), () {
+        Future.delayed(const Duration(milliseconds: 400), () {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 500),
-              pageBuilder: (_, animation, __) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: const LoginPage(),
-                );
-              },
+              pageBuilder: (_, animation, __) => FadeTransition(
+                opacity: animation,
+                child: const LoginPage(),
+              ),
             ),
           );
         });
-        return false;
       }
     });
   }
@@ -96,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // NO WHITE FLASH FIX ✔️
+      backgroundColor: Colors.black, // no white flash
       body: AnimatedOpacity(
         duration: const Duration(milliseconds: 400),
         opacity: fadeOut ? 0 : 1,
@@ -104,51 +103,60 @@ class _SplashScreenState extends State<SplashScreen>
           width: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(Assets.boardBackground),
+              image: AssetImage(Assets.assetsBackground), // background image
               fit: BoxFit.cover,
             ),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // chess logo
+
+              /// 🔥 Chess Logo
               Image.asset(
-                Assets.boardChess,
-                width: 240,
-                height: 240,
+                Assets.assetsChessClashLogo,
+                width: 220,
               ),
 
-              const SizedBox(height: 70),
+              const SizedBox(height: 90),
 
-              // Loading text
-              Text(
-                "Loading...",
+              /// LOADING TEXT
+              const Text(
+                "LOADING...",
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.88),
-                  fontSize: 18,
-                  letterSpacing: 0.9,
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1.5,
                 ),
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
 
-              // Loader bar
+              /// GREEN PROGRESS BAR (image jaisa)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 60),
                 child: Container(
-                  height: 3,
+                  height: 14,
                   decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(4),
+                    color: const Color(0xFF7A3F00), // brown border like image
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: FractionallySizedBox(
-                      widthFactor: progress,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FractionallySizedBox(
+                        widthFactor: progress,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFF66FF00),
+                                Color(0xFF2ECC00),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
                       ),
                     ),
