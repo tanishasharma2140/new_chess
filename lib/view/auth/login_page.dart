@@ -1,12 +1,10 @@
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:new_chess/generated/assets.dart';
-import 'package:new_chess/res/game_bottom_nav.dart';
-import 'package:new_chess/res/text_const.dart';
-import 'package:new_chess/view/auth/register.dart';
-import 'package:new_chess/view/dashboard_page.dart';
-import 'package:pinput/pinput.dart';
+import 'package:new_chess/res/font_family.dart';
+import 'package:new_chess/res/sizing_const.dart';
+import 'package:new_chess/view/auth/otp_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,371 +13,349 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
-  final TextEditingController _mobileController = TextEditingController();
-  final TextEditingController _otpController = TextEditingController();
-  bool showOtp = false;
+class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin  {
 
-  late AnimationController _animationController;
-  late AnimationController _breathingController;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _rotationAnimation;
-  late Animation<double> _breathingAnimation;
+  late final AnimationController _shimmerController;
+  late final Animation<double> _shimmerAnim;
 
   @override
   void initState() {
     super.initState();
 
-    // Initial entry animation
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1500),
+    _shimmerController = AnimationController(
       vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat();
+
+    _shimmerAnim = Tween<double>(begin: -2, end: 2).animate(
+      CurvedAnimation(
+        parent: _shimmerController,
+        curve: Curves.easeInOut,
+      ),
     );
-
-    _scaleAnimation = TweenSequence<double>([
-      TweenSequenceItem(
-        tween: Tween<double>(begin: 0.0, end: 1.1)
-            .chain(CurveTween(curve: Curves.easeOut)),
-        weight: 50,
-      ),
-      TweenSequenceItem(
-        tween: Tween<double>(begin: 1.1, end: 1.0)
-            .chain(CurveTween(curve: Curves.easeInOut)),
-        weight: 50,
-      ),
-    ]).animate(_animationController);
-
-    _rotationAnimation = Tween<double>(
-      begin: -0.2,
-      end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
-
-    // Continuous breathing animation
-    _breathingController = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    )..repeat(reverse: true);
-
-    _breathingAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.05,
-    ).animate(CurvedAnimation(
-      parent: _breathingController,
-      curve: Curves.easeInOut,
-    ));
-
-    _animationController.forward();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
-    _breathingController.dispose();
+    _shimmerController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
+
+  final TextEditingController _phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(Assets.boardBackground),
+            image: AssetImage(Assets.assetsBackground),
             fit: BoxFit.cover,
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Animated Logo with breathing effect
-                    AnimatedBuilder(
-                      animation: Listenable.merge([
-                        _animationController,
-                        _breathingController,
-                      ]),
-                      builder: (context, child) {
-                        // Use breathing only after initial animation completes
-                        final breathingScale = _animationController.isCompleted
-                            ? _breathingAnimation.value
-                            : 1.0;
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
 
-                        return Transform.scale(
-                          scale: _scaleAnimation.value * breathingScale,
-                          child: Transform.rotate(
-                            angle: _rotationAnimation.value,
-                            child: child,
-                          ),
-                        );
-                      },
-                      child: Image.asset(
-                        Assets.boardChess,
-                        height: 180,
-                      ),
-                    ),
-
-                    const SizedBox(height: 40),
-
-                    // Switch between Login and OTP
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      child: showOtp ? _otpUi() : _loginUi(),
-                    ),
-                  ],
-                ),
+              // ♟ Chess Image
+              Image.asset(
+                Assets.assetsPawnTwo,
+                height: 130,
               ),
-            ),
+
+              const SizedBox(height: 5),
+
+              _buildShimmerTitle(),
+
+              const SizedBox(height: 25),
+
+              // GOLD BORDER IMAGE
+              _buildCard(),
+
+              // const SizedBox(height: 35),
+
+              // const Text(
+              //   "New here? Create an account",
+              //   style: TextStyle(
+              //     color: Colors.white,
+              //     fontSize: 16,
+              //   ),
+              // ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  // ================= LOGIN UI =================
-
-  Widget _loginUi() {
-    return Column(
-      key: const ValueKey('login'),
-      mainAxisSize: MainAxisSize.min,
-      children: [
-         TextConst(
-           title:
-          "Login",
-           size: 32,
-           color: Colors.white,
-           fontWeight: FontWeight.bold,
-        ),
-
-        const SizedBox(height: 30),
-
-        _inputContainer(
-          child: TextField(
-            controller: _mobileController,
-            keyboardType: TextInputType.phone,
-            maxLength: 10,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-            decoration: _inputDecoration(
-              hint: "Enter mobile number",
-              icon: Icons.phone_android,
-            ),
+  Widget _buildCard() {
+    return Container(
+      width: Sizes.screenWidth *0.86,
+      height: Sizes.screenHeight*0.3,
+      decoration: BoxDecoration(
+        color: const Color(0x1A0F0A03), // rgba(15,10,3,0.65) approx
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE0B25C), width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFE0B25C).withOpacity(0.08),
+            blurRadius: 1,
+            spreadRadius: 1,
           ),
-        ),
-
-        const SizedBox(height: 20),
-
-        _primaryButton(
-          text: "Get OTP",
-          onTap: () {
-            if (_mobileController.text.length == 10) {
-              setState(() => showOtp = true);
-            }
-          },
-        ),
-
-        const SizedBox(height: 25),
-
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (context) => Register(mobileNumber: _mobileController.text),
+          BoxShadow(
+            color: const Color(0xFFE0B25C).withOpacity(0.06),
+            blurRadius: 4,
+            spreadRadius: 4,
+          ),
+          BoxShadow(
+            color: const Color(0xFFE0B25C).withOpacity(0.12),
+            blurRadius: 30,
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(14),
+        child: Stack(
+          children: [
+            // Dark glass inner fill
+            Positioned.fill(
+              child: Container(
+                color: const Color(0xFF3E1F0C).withOpacity(0.25)
               ),
-            );
-          },
-          child:  TextConst(
-            title:
-            "Create Account",
-            color: Colors.white,
-            size: 16,
-            decoration: TextDecoration.underline,
-            decorationColor: Colors.white,
-          ),
+            ),
+
+            // Inner inset shadow
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  gradient: RadialGradient(
+                    colors: [
+                      Colors.transparent,
+                    Color(0xFF5A2E10).withOpacity(0.75),
+                    ],
+                    radius: 1.2,
+                  ),
+                ),
+              ),
+            ),
+
+            // Corner ornaments ✦
+            ..._corners(),
+
+            // Card content
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 32, vertical: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+
+                  // Top ornate gold line
+                  _ornateLine(),
+
+                  const SizedBox(height: 20),
+
+                  // Phone field
+                  _buildPhoneField(),
+
+                  const SizedBox(height: 22),
+
+                  // Login button
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, CupertinoPageRoute(builder: (context)=> OtpPage(phoneNumber: "9876543210")));
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+
+                        Image.asset(
+                          Assets.assetsBlueButton,
+                          height: 55,
+                          fit: BoxFit.contain,
+                        ),
+
+                        const Text(
+                          "LOGIN",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Bottom ornate gold line
+                  _ornateLine(bottom: true),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
-
-  Widget _otpUi() {
-    return Column(
-      key: const ValueKey('otp'),
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const TextConst(
-          title: "Verify OTP",
-          size: 32,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-
-        const SizedBox(height: 12),
-
-        TextConst(
-          title:
-          "+91 ${_mobileController.text}",
-          color: Colors.white.withOpacity(0.8),
-          size: 16,
-        ),
-
-        const SizedBox(height: 35),
-
-        Pinput(
-          controller: _otpController,
-          length: 4,
-          defaultPinTheme: PinTheme(
-            width: 50,
-            height: 56,
-            textStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white38),
-              color: Colors.white.withOpacity(0.1),
-            ),
-          ),
-          focusedPinTheme: PinTheme(
-            width: 50,
-            height: 50,
-            textStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white, width: 2),
-              color: Colors.white.withOpacity(0.15),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 30),
-
-        _primaryButton(
-          text: "Verify",
-          onTap: () {
-            Navigator.push(context, CupertinoPageRoute(builder: (context)=> MainRoot()));
-          },
-        ),
-
-        const SizedBox(height: 20),
-
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                setState(() => showOtp = false);
-              },
-              child: TextConst(
-                title:
-                "Change Number",
-                color: Colors.white.withOpacity(0.9),
-                size: 15,
-                fontWeight: FontWeight.w500,
+  Widget _buildShimmerTitle() {
+    return AnimatedBuilder(
+      animation: _shimmerAnim,
+      builder: (_, __) => ShaderMask(
+        shaderCallback: (bounds) => LinearGradient(
+          begin: Alignment(_shimmerAnim.value - 1, 0),
+          end: Alignment(_shimmerAnim.value + 1, 0),
+          colors: const [
+            Color(0xFFD4900A),
+            Color(0xFFFFE082),
+            Color(0xFFf5c26b),
+            Color(0xFFFFE082),
+            Color(0xFFD4900A),
+          ],
+          stops: const [0.0, 0.3, 0.5, 0.7, 1.0],
+        ).createShader(bounds),
+        child: const Text(
+          'CHESS LOGIN',
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.5,
+            color: Colors.white,
+            fontFamily: FontFamily.kanitReg,
+            shadows: [
+              Shadow(
+                color: Colors.black54,
+                blurRadius: 6,
+                offset: Offset(2, 3),
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                "•",
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.6),
+  // Corner ✦ ornaments
+  List<Widget> _corners() {
+    const style = TextStyle(
+      color: Color(0xFFE0B25C),
+      fontSize: 18,
+      height: 1,
+    );
+    return [
+      Positioned(top: 10, left: 14, child: Text('✦', style: style.copyWith(color: const Color(0xB3E0B25C)))),
+      Positioned(top: 10, right: 14, child: Text('✦', style: style.copyWith(color: const Color(0xB3E0B25C)))),
+      Positioned(bottom: 10, left: 14, child: Text('✦', style: style.copyWith(color: const Color(0xB3E0B25C)))),
+      Positioned(bottom: 10, right: 14, child: Text('✦', style: style.copyWith(color: const Color(0xB3E0B25C)))),
+    ];
+  }
+
+  // Ornate gradient line (top/bottom dividers)
+  Widget _ornateLine({bool bottom = false}) {
+    return Container(
+      margin: EdgeInsets.only(
+        top: bottom ? 20 : 0,
+        bottom: bottom ? 0 : 0,
+      ),
+      width: double.infinity,
+      height: 1,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.transparent,
+            Color(0xFFE0B25C),
+            Colors.transparent,
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Phone number input field
+  Widget _buildPhoneField() {
+    return Container(
+      height: 50,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.38),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: const Color(0xFFE0B25C),
+          width: 1.4,
+        ),
+      ),
+      child: Row(
+        children: [
+
+          // 🇮🇳 Flag (thoda chhota)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: Image.asset(
+              Assets.assetsIndFlag,
+              height: 18,   // 👈 height kam
+              width: 24,    // 👈 width kam
+              fit: BoxFit.cover,
+            ),
+          ),
+
+          const SizedBox(width: 4),  // 👈 spacing kam
+
+          // +91 (thoda compact)
+          const Text(
+            '+91',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 13,   // 👈 font thoda kam
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+
+          const SizedBox(width: 6), // 👈 spacing kam
+
+          // Divider (thoda chhota)
+          Container(
+            width: 1,
+            height: 18,   // 👈 height kam
+            color: const Color(0xFFE0B25C),
+          ),
+
+          const SizedBox(width: 6), // 👈 spacing kam
+
+          // 📱 TextField ko zyada jagah
+          Expanded(
+            flex: 3,   // 👈 ye important hai
+            child: TextField(
+              controller: _phoneController,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10),
+              ],
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+              ),
+              cursorColor: const Color(0xFFE0B25C),
+              decoration: const InputDecoration(
+                hintText: 'Enter your mobile number',
+                hintStyle: TextStyle(
+                  color: Color(0x73FFFFFF),
                   fontSize: 15,
                 ),
+                border: InputBorder.none,
+                isCollapsed: true,
               ),
             ),
-
-            GestureDetector(
-              onTap: () {
-                // Resend OTP
-              },
-              child: TextConst(
-                title:
-                "Resend OTP",
-                color: Colors.white.withOpacity(0.9),
-                size: 15,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      )
     );
   }
 
-  // ================= Reusable Widgets =================
-
-  Widget _inputContainer({required Widget child}) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white24),
-        color: Colors.white.withOpacity(0.15),
-      ),
-      child: child,
-    );
-  }
-
-  InputDecoration _inputDecoration({
-    required String hint,
-    required IconData icon,
-  }) {
-    return InputDecoration(
-      counterText: "",
-      border: InputBorder.none,
-      hintText: hint,
-      hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-      icon: Icon(icon, color: Colors.white),
-    );
-  }
-
-  Widget _primaryButton({
-    required String text,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.white.withOpacity(0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        alignment: Alignment.center,
-        child: TextConst(
-          title:
-          text,
-          color: Colors.black87,
-          fontWeight: FontWeight.bold,
-          size: 17,
-        ),
-      ),
-    );
-  }
 }
