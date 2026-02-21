@@ -76,6 +76,7 @@ class Assets {
   static const String assetsWhiteQueen = 'Assets/white_queen.png';
   static const String assetsWhiteRKnight = 'Assets/white_r_knight.png';
   static const String assetsWhiteRook = 'Assets/white_rook.png';
+  static const String assetsWoodenPopup = 'Assets/wooden_popup.png';
   static const String assetsWinner = 'Assets/winner.gif';
   static const String assetsWoodenTile = 'Assets/wooden_tile.png';
   static const String boardAiBackground = 'Assets/board/ai_background.png';

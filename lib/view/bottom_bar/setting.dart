@@ -95,7 +95,7 @@ class _SettingState extends State<Setting> {
                 _optionTile("Privacy & Security"),
                 GestureDetector(
                     onTap: (){
-                      Navigator.push(context, CupertinoPageRoute(builder: (context)=> GameHistory()));
+                      // Navigator.push(context, CupertinoPageRoute(builder: (context)=> GameHistory()));
                     },
                     child: _optionTile("Game History")),
 

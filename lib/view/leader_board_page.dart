@@ -138,120 +138,54 @@ class _LeaderBoardPageState extends State<LeaderBoardPage>
           fit: BoxFit.fill,
         ),
       ),
-      child: SafeArea(
-        child: Column(
-          children: [
-            /// Header
-            _topWoodenHeader(),
-            const SizedBox(height: 10),
-
-            /// Tab Row
-            _buildTabRow(),
-            const SizedBox(height: 10),
-
-            /// ✅ Podium — Column ke andar fixed space nahi, sirf apni height leta hai
-            _buildPodium(),
-            const SizedBox(height: 8),
-
-            /// ✅ Rank List — baaki saari space yahi leta hai
-            Expanded(child: _buildRankList()),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _topWoodenHeader() {
-    return SizedBox(
-      height: Sizes.screenHeight * 0.12,
-      width: double.infinity,
-      child: Stack(
-        clipBehavior: Clip.hardEdge,
+      child: Column(
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              Assets.assetsWoodenTile,
-              fit: BoxFit.cover,
-            ),
-          ),
+          /// Header
+          _topWoodenHeader(),
+          const SizedBox(height: 10),
 
-          /// Back Button
-          Positioned(
-            left: 16,
-            top: 0,
-            bottom: 0,
-            child: Center(
-              child: GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  height: Sizes.screenHeight * 0.065,
-                  width: Sizes.screenHeight * 0.065,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFFFD700), Color(0xFFFFA000)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black38,
-                        blurRadius: 8,
-                        offset: Offset(2, 3),
-                      )
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          /// Tab Row
+          _buildTabRow(),
+          const SizedBox(height: 10),
+          _buildPodium(),
+          const SizedBox(height: 8),
 
-          /// Center Title
-          const Positioned.fill(
-            child: Center(
-              child: Text(
-                "🏆  RANKINGS",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                  fontFamily: FontFamily.kanitReg,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black54,
-                      blurRadius: 6,
-                      offset: Offset(2, 2),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          /// Right Setting Strip
-          Positioned(
-            right: 16,
-            top: 0,
-            bottom: 0,
-            child: Center(
-              child: Image.asset(
-                Assets.assetsRedSettingStrip,
-                height: Sizes.screenHeight * 0.09,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
+          Expanded(child: _buildRankList()),
         ],
       ),
     );
   }
 
+  Widget _topWoodenHeader() {
+    return Container(
+      height: Sizes.screenHeight * 0.13,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(Assets.assetsWoodenTile),
+          fit: BoxFit.cover,
+        ),
+      ),
+      alignment: Alignment.center,
+      child: const Text(
+        "🏆  RANKINGS",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 2,
+          fontFamily: FontFamily.kanitReg,
+          color: Colors.white,
+          shadows: [
+            Shadow(
+              color: Colors.black54,
+              blurRadius: 6,
+              offset: Offset(2, 2),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   Widget _buildTabRow() {
     final tabs = ['Global', 'Friends', 'Weekly'];
     return Container(
