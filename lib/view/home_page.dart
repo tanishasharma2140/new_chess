@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:new_chess/generated/assets.dart';
 import 'package:new_chess/res/font_family.dart';
 import 'package:new_chess/res/sizing_const.dart';
-import 'package:new_chess/view/profile_page.dart';
+import 'package:new_chess/res/text_const.dart';
+import 'package:new_chess/view_model/services/game_service.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -157,7 +158,10 @@ class _HomePageState extends State<HomePage>
     return _imageButton(
       text: "PLAY VS COMPUTER",
       imagePath: Assets.assetsGreenBtn,
-      onTap: () {},
+      onTap: () {
+        final gameCon = Provider.of<GameController>(context, listen: false);
+        gameCon.initGame(4, context);   // 👈 gameType 4
+      },
     );
   }
 
@@ -165,7 +169,10 @@ class _HomePageState extends State<HomePage>
     return _imageButton(
       text: "PLAY ONLINE",
       imagePath: Assets.assetsBlueButton,
-      onTap: () {},
+      onTap: () {
+        final gameCon = Provider.of<GameController>(context, listen: false);
+        gameCon.initGame(1, context);   // 👈 gameType 1
+      },
     );
   }
 
@@ -173,7 +180,10 @@ class _HomePageState extends State<HomePage>
     return _imageButton(
       text: "PLAY WITH FRIEND",
       imagePath: Assets.assetsBlueButton,
-      onTap: () {},
+      onTap: () {
+        final gameCon = Provider.of<GameController>(context, listen: false);
+        gameCon.initGame(3, context);   // 👈 gameType 3
+      },
     );
   }
 
@@ -257,11 +267,6 @@ class _ProfilePopup extends StatelessWidget {
             image: AssetImage(Assets.assetsWoodenPopup),
             fit: BoxFit.contain,
           ),
-          // Gold border matching wooden image style
-          // border: Border.all(
-          //   color: const Color(0xFFCB9E3A),
-          //   width: 2,
-          // ),
           borderRadius: BorderRadius.circular(16),
         ),
         child: ClipRRect(
@@ -274,7 +279,6 @@ class _ProfilePopup extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
 
-                  // ── GOLD HEADER ───────────────────────────────────────
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
@@ -311,7 +315,6 @@ class _ProfilePopup extends StatelessWidget {
 
                   const SizedBox(height: 22),
 
-                  // ── PROFILE IMAGE ────────────────────────────────────
                   Stack(
                     alignment: Alignment.bottomRight,
                     children: [
@@ -320,56 +323,22 @@ class _ProfilePopup extends StatelessWidget {
                         height: 95,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(
-                              color: const Color(0xFFFFD700),
-                              width: 3),
+                          // border: Border.all(
+                          //     color: const Color(0xFFFFD700),
+                          //     width: 3),
                           boxShadow: [
                             BoxShadow(
                               color: const Color(0xFFFFD700)
-                                  .withOpacity(0.5),
-                              blurRadius: 16,
+                                  .withOpacity(0.2),
+                              blurRadius: 10,
                               spreadRadius: 2,
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.6),
-                              blurRadius: 12,
-                              offset: const Offset(0, 6),
                             ),
                           ],
                         ),
                         child: ClipOval(
                           child: Image.asset(
-                            Assets.assetsFemaleProfile,
+                            Assets.assetsGoldCircleProfile,
                             fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      // Level badge
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFFFFD700),
-                              Color(0xFFFFA000)
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.amber.withOpacity(0.6),
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                        child: Text(
-                          'Lv.${_user['level']}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontFamily.kanitReg,
-                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -378,7 +347,6 @@ class _ProfilePopup extends StatelessWidget {
 
                   const SizedBox(height: 14),
 
-                  // ── NAME ─────────────────────────────────────────────
                   Text(
                     _user['name'],
                     style: const TextStyle(
@@ -407,7 +375,6 @@ class _ProfilePopup extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  // ── STATS ROW ────────────────────────────────────────
                   Row(
                     children: [
                       Expanded(
@@ -460,22 +427,20 @@ class _ProfilePopup extends StatelessWidget {
                           crossAxisAlignment:
                           CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            TextConst(
+                              title:
                               '${_user['winStreak']} Win Streak',
-                              style: const TextStyle(
-                                color: Color(0xFFFFE0A0),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                fontFamily: FontFamily.kanitReg,
-                              ),
+                              color: Color(0xFFFFE0A0),
+                              fontWeight: FontWeight.bold,
+                              size: 14,
+                              fontFamily: FontFamily.kanitReg,
                             ),
-                            const Text(
+                             TextConst(
+                               title:
                               "You're on fire! 🔥",
-                              style: TextStyle(
-                                color: Colors.white38,
-                                fontSize: 11,
-                                fontFamily: FontFamily.kanitReg,
-                              ),
+                               color: Colors.white38,
+                               size: 11,
+                               fontFamily: FontFamily.kanitReg,
                             ),
                           ],
                         ),

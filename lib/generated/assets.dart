@@ -31,6 +31,7 @@ class Assets {
   static const String assetsFemaleProfile = 'Assets/female_profile.png';
   static const String assetsFrdBtn = 'Assets/frd_btn.png';
   static const String assetsGalaxyBg = 'Assets/galaxy_bg.jpg';
+  static const String assetsGoldBackButton = 'Assets/gold_back_button.png';
   static const String assetsGoldBorder = 'Assets/gold_border.png';
   static const String assetsGoldCircleProfile = 'Assets/gold_circle_profile.png';
   static const String assetsGoldenCircle = 'Assets/golden_circle.png';
@@ -76,8 +77,8 @@ class Assets {
   static const String assetsWhiteQueen = 'Assets/white_queen.png';
   static const String assetsWhiteRKnight = 'Assets/white_r_knight.png';
   static const String assetsWhiteRook = 'Assets/white_rook.png';
-  static const String assetsWoodenPopup = 'Assets/wooden_popup.png';
   static const String assetsWinner = 'Assets/winner.gif';
+  static const String assetsWoodenPopup = 'Assets/wooden_popup.png';
   static const String assetsWoodenTile = 'Assets/wooden_tile.png';
   static const String boardAiBackground = 'Assets/board/ai_background.png';
   static const String boardBackground = 'Assets/board/background.png';
